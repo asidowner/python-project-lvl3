@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "hexlet-code"
+version = "0.1.0"
+description = "Site loader for offline access"
+authors = ["Anton Sidorenkov"]
+packages = [
+    { include = 'page_loader' }
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+requests = "^2.28.1"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^5.0.4"
+pytest = "^7.1.2"
+pytest-cov = "^3.0.0"
+requests-mock = "^1.9.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+page-loader = 'page_loader.scripts.page_loader:main'
