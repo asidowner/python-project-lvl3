@@ -14,10 +14,11 @@ _URL_DESCRIPTION = 'URL to the page to be downloaded'
 
 def main():
     args: Namespace = _get_command_args()
-    download(
+    file_path = download(
         args.url,
         args.output
     )
+    print(file_path)
 
 
 def _get_command_args() -> Namespace:

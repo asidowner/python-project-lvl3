@@ -1,13 +1,8 @@
-from random import randint
-
 import pytest
 import os
 import requests
 import requests_mock
-from requests_mock import Adapter
-from requests import Session
 from page_loader import download
-
 
 def path_to_fixtures(name: str) -> str:
     return os.path.join('tests', 'fixtures', name)
