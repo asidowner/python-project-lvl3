@@ -28,3 +28,7 @@ echo "path to file"
 ```commandline
 page-loader -h
 ```
+
+
+### Example
+[![asciicast](https://asciinema.org/a/JoyAFaUbimoNdnjaFSqBRcOqt.svg)](https://asciinema.org/a/JoyAFaUbimoNdnjaFSqBRcOqt)
