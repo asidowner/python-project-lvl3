@@ -1,13 +1,62 @@
-from page_loader.lib.f_name_generator import get_f_name_from_url
+import pytest
+
+from page_loader.lib.name_generator import get_html_name_from_url
+from page_loader.lib.name_generator import get_image_name_from_url
+from page_loader.lib.name_generator import get_image_dir_name_from_url
 
 
-def test_get_f_name_from_url_by_base_url():
-    assert get_f_name_from_url('https://google.com') == 'google-com.html'
+@pytest.mark.parametrize('url,expected',
+                         [
+                             (
+                                 'https://google.com',
+                                 'google-com_files'
+                             ),
+                             (
+                                 'https://google.com?a=b',
+                                 'google-com-a-b_files'
+                             ),
+                             (
+                                 'https://google.com/path/to/some.jpg',
+                                 'google-com-path-to-some_files'
+                             )
+                         ])
+def test_get_image_dir_from_url(url, expected):
+    assert get_image_dir_name_from_url(url) == expected
 
 
-def test_get_f_name_from_url_with_qs():
-    assert get_f_name_from_url('https://google.com?a=b') == 'google-com-a-b.html'
+@pytest.mark.parametrize('url,expected',
+                         [
+                             (
+                                 'https://google.com',
+                                 'google-com'
+                             ),
+                             (
+                                 'https://google.com?a=b',
+                                 'google-com-a-b'
+                             ),
+                             (
+                                 'https://google.com/path/to/some.jpg',
+                                 'google-com-path-to-some.jpg'
+                             )
+                         ])
+def test_get_image_name_from_url(url, expected):
+    assert get_image_name_from_url(url) == expected
 
 
-def test_get_f_name_from_url_with_path():
-    assert get_f_name_from_url('https://google.com/path/to/some') == 'google-com-path-to-some.html'
+@pytest.mark.parametrize('url,expected',
+                         [
+                             (
+                                 'https://google.com',
+                                 'google-com.html'
+                             ),
+                             (
+                                 'https://google.com?a=b',
+                                 'google-com-a-b.html'
+                             ),
+                             (
+                                 'https://google.com/path/to/some.jpg',
+                                 'google-com-path-to-some.html'
+                             )
+                         ])
+def get_html_name_from_url(url, expected):
+    assert get_html_name_from_url(url) == expected

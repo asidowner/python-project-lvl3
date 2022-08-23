@@ -32,3 +32,6 @@ page-loader -h
 
 ### Example
 [![asciicast](https://asciinema.org/a/JoyAFaUbimoNdnjaFSqBRcOqt.svg)](https://asciinema.org/a/JoyAFaUbimoNdnjaFSqBRcOqt)
+
+### Example load site with page
+[![asciicast](https://asciinema.org/a/dYyyTlCKhOweP13L3ieafyXTl.svg)](https://asciinema.org/a/dYyyTlCKhOweP13L3ieafyXTl)

@@ -1,6 +1,7 @@
+from page_loader.downloader.site_downloader import save_site_from_bytes
+
 from requests import Session
 import os
-from page_loader.lib.f_name_generator import get_f_name_from_url
 
 _CUR_DIR = os.getcwd()
 
@@ -13,9 +14,10 @@ def download(url: str,
                                  f' not exists or not created')
 
     response = req_session.get(url)
-    path_to_file = os.path.join(output, get_f_name_from_url(url))
 
-    with open(path_to_file, 'w') as f:
-        f.write(response.text)
+    path_to_file = save_site_from_bytes(response.content,
+                                        output,
+                                        url,
+                                        req_session)
 
     return path_to_file
