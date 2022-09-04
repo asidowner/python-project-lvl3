@@ -2,7 +2,7 @@ from urllib.parse import urlparse, ParseResult
 from pathlib import PurePath
 import re
 
-_PATTERN = r'\W'
+_PATTERN = r'[\W|_]+'
 
 
 def _get_f_name_from_url(url: str) -> tuple:
@@ -24,12 +24,12 @@ def _get_f_name_from_url(url: str) -> tuple:
     return file_name, suffix
 
 
-def get_image_name_from_url(url: str):
+def get_file_name_from_url(url: str):
     file_name, suffix = _get_f_name_from_url(url)
     return ''.join([file_name, suffix])
 
 
-def get_image_dir_name_from_url(url: str):
+def get_file_dir_name_from_url(url: str):
     file_name, suffix = _get_f_name_from_url(url)
     return file_name + '_files'
 

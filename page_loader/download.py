@@ -13,11 +13,8 @@ def download(url: str,
         raise NotADirectoryError(f'Directory on {output}'
                                  f' not exists or not created')
 
-    response = req_session.get(url)
-
-    path_to_file = save_site_from_bytes(response.content,
+    path_to_file = save_site_from_bytes(req_session,
                                         output,
-                                        url,
-                                        req_session)
+                                        url)
 
     return path_to_file

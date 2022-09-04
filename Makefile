@@ -11,7 +11,7 @@ package-remove:
 	python3 -m pip uninstall hexlet-code
 
 lint:
-	poetry run flake8 page_loader
+	poetry run flake8 page_loader tests
 
 test:
 	poetry run pytest
