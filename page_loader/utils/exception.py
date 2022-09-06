@@ -1,0 +1,2 @@
+class SiteNotAvailableError(Exception):
+    pass

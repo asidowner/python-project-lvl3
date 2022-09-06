@@ -2,6 +2,7 @@
 import argparse
 import os
 from argparse import ArgumentParser, Namespace
+from logging import getLogger
 
 from page_loader import download
 
@@ -11,13 +12,21 @@ _OUTPUT_DESCRIPTION = 'Path to output directory.' \
                       ' By default: current directory'
 _URL_DESCRIPTION = 'URL to the page to be downloaded'
 
+_logger = getLogger()
+
 
 def main():
     args: Namespace = _get_command_args()
+    _logger.info('Start app')
+    _logger.debug(f'args from request: url={args.url}, output={args.output}')
+
     file_path = download(
         args.url,
         args.output
     )
+
+    _logger.info('End app with success')
+
     print(file_path)
 
 
