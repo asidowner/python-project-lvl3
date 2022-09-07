@@ -4,9 +4,14 @@ from logging import getLogger
 from requests import Session
 import os
 
+from page_loader.utils.exception import UnexpectedError
+from page_loader.utils.exception import SiteNotAvailableError
+from page_loader.utils.exception import FileNotAvailableError
+
 _CUR_DIR = os.getcwd()
 
 _logger = getLogger()
+_error_logger = getLogger('error')
 
 
 def download(url: str,
@@ -25,6 +30,13 @@ def download(url: str,
                                             url)
         _logger.debug(f'path_to_file: {path_to_file}')
         return path_to_file
-    except Exception as e:
-        _logger.error(f'{e}')
+    except (SiteNotAvailableError,
+            FileNotAvailableError,
+            NotADirectoryError,
+            OSError) as e:
+        _error_logger.error(e)
         raise
+    except Exception as e:
+        _error_logger.error(e)
+        raise UnexpectedError('Unexpected error,'
+                              ' try up logging level for more information')

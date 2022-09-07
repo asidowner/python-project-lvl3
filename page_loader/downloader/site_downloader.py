@@ -10,6 +10,7 @@ from page_loader.lib.name_generator import get_file_name_from_url
 from page_loader.lib.name_generator import get_file_dir_name_from_url
 from page_loader.lib.name_generator import get_html_name_from_url
 from page_loader.utils.exception import SiteNotAvailableError
+from page_loader.utils.exception import FileNotAvailableError
 
 _ALLOWED_TAGS = ['img', 'link', 'script']
 
@@ -29,11 +30,9 @@ def save_site_from_bytes(req_session: Session,
     response = req_session.get(url)
 
     if response.status_code != 200:
-        _logger.error(f'GET {url} return:'
-                      f'\nstatus_code {response.status_code}'
-                      f'\nresponse: {response.text}')
-        raise SiteNotAvailableError('Site return HTTP'
-                                    ' status_code != 200')
+        raise SiteNotAvailableError(f'Site return'
+                                    f' HTTP code = {response.status_code}'
+                                    f' on this resources: {url}')
 
     _logger.info('Site data received successfully')
     _logger.debug(f'status_code: {response.status_code}')
@@ -59,8 +58,12 @@ def save_site_from_bytes(req_session: Session,
     _logger.debug(f'file_name: {file_name}')
     _logger.debug(f'file_path: {file_path}')
 
-    with open(file_path, 'wb') as f:
-        f.write(html.prettify(encoding='utf8'))
+    try:
+        with open(file_path, 'wb') as f:
+            f.write(html.prettify(encoding='utf8'))
+    except OSError:
+        raise OSError(f"Can't write data to {file_path}, check permissions")
+
     _logger.info('Site data saved')
 
     _logger.debug('End save_site_from_bytes')
@@ -161,11 +164,9 @@ def _save_file(parsed_main_url: ParseResult,
     _logger.info('Try get additional file')
     response = req_session.get(file_url)
     if response.status_code != 200:
-        _logger.error(f'GET {file_url} return:'
-                      f'\nstatus_code {response.status_code}'
-                      f'\nresponse: {response.text}')
-        raise SiteNotAvailableError('Url to file return HTTP'
-                                    ' status_code != 200')
+        raise FileNotAvailableError(f'Site return'
+                                    f' HTTP code = {response.status_code}'
+                                    f' on this resources: {file_url}')
 
     file_name = get_file_name_from_url(file_url)
     file_path = os.path.join(dir_path, file_name)
@@ -173,8 +174,13 @@ def _save_file(parsed_main_url: ParseResult,
     _logger.debug(f'file_name: {file_name}')
     _logger.debug(f'file_path: {file_path}')
 
-    with open(file_path, 'wb') as f:
-        f.write(response.content)
+    try:
+        with open(file_path, 'wb') as f:
+            f.write(response.content)
+    except OSError:
+        _logger.error(f"Can't write data to {file_path}, check permissions")
+        raise
+
     _logger.info('Additional file saved')
 
     result = '/'.join([os.path.basename(dir_path),

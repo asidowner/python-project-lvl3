@@ -3,6 +3,7 @@ import os
 import requests
 import requests_mock
 from page_loader import download
+from page_loader.utils.exception import SiteNotAvailableError, FileNotAvailableError
 
 
 def path_to_fixtures(name: str) -> str:
@@ -42,13 +43,56 @@ def main_html_url(base_mock_url):
 
 
 @pytest.fixture
-def mock_data(base_mock_url):
+def html_url_with_404(base_mock_url):
+    return base_mock_url + 'test_error'
+
+
+@pytest.fixture
+def html_url_with_file_404(base_mock_url):
+    return base_mock_url + 'file_error'
+
+
+@pytest.fixture
+def mock_data(base_mock_url,
+              main_html_url,
+              html_url_with_404,
+              html_url_with_file_404):
     return [
-        (base_mock_url + 'project/51.json?a=b', path_to_fixtures('index.html')),
-        (base_mock_url + 'img.png', path_to_fixtures('img.png')),
-        (base_mock_url + 'script1.js', path_to_fixtures('script1.js')),
-        (base_mock_url + 'script2.js', path_to_fixtures('script2.js')),
-        (base_mock_url + 'simple.css', path_to_fixtures('simple.css')),
+        (
+            main_html_url,
+            path_to_fixtures('index.html'),
+            200
+        ),
+        (
+            base_mock_url + 'img.png',
+            path_to_fixtures('img.png'),
+            200
+        ),
+        (
+            base_mock_url + 'script1.js',
+            path_to_fixtures('script1.js'),
+            200
+        ),
+        (
+            base_mock_url + 'script2.js',
+            path_to_fixtures('script2.js'),
+            200
+        ),
+        (
+            base_mock_url + 'simple.css',
+            path_to_fixtures('simple.css'),
+            200
+        ),
+        (
+            html_url_with_file_404,
+            path_to_fixtures('index_error.html'),
+            200
+        ),
+        (
+            html_url_with_404,
+            None,
+            404
+        ),
     ]
 
 
@@ -73,9 +117,15 @@ def mock_session(data_to_download,
     session = requests.Session()
     adapter = requests_mock.Adapter()
     session.mount('mock://', adapter)
-    for url, data in mock_data:
-        with open(data, 'rb') as f:
-            adapter.register_uri('GET', url, content=f.read())
+    for url, data, status_code in mock_data:
+        if data:
+            with open(data, 'rb') as f:
+                adapter.register_uri('GET',
+                                     url,
+                                     status_code=status_code,
+                                     content=f.read())
+        else:
+            adapter.register_uri('GET', url, status_code=status_code)
     return session
 
 
@@ -123,3 +173,17 @@ def test_file_with_href_not_downloaded(tmpdir,
 def test_raise_if_dir_not_found(mock_session, main_html_url):
     with pytest.raises(NotADirectoryError):
         download(main_html_url, '/unknown/dir/path', mock_session)
+
+
+def test_raise_if_site_not_available_error(tmpdir,
+                                           mock_session,
+                                           html_url_with_404):
+    with pytest.raises(SiteNotAvailableError):
+        download(html_url_with_404, tmpdir, mock_session)
+
+
+def test_raise_if_file_not_available_error(tmpdir,
+                                           mock_session,
+                                           html_url_with_file_404):
+    with pytest.raises(FileNotAvailableError):
+        download(html_url_with_file_404, tmpdir, mock_session)

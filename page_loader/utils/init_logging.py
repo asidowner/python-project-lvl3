@@ -1,16 +1,7 @@
 import logging.config
 import os
 
-_LOGGING_LEVEL = os.environ.get('PAGE_LOADER_LOGGING_LEVEL')
-_AVAILABLE_LOGGING_LEVEL = ('DEBUG',
-                            'INFO',
-                            'WARNING',
-                            'ERROR',
-                            'CRITICAL',
-                            'NOTSET')
-
-if not _LOGGING_LEVEL or _LOGGING_LEVEL not in _AVAILABLE_LOGGING_LEVEL:
-    _LOGGING_LEVEL = 'INFO'
+_LOGGING_LEVEL = os.environ.get('PAGE_LOADER_LOGGING_LEVEL', 'INFO')
 
 _LOGGING_CONFIG = {
     'version': 1,
@@ -27,6 +18,12 @@ _LOGGING_CONFIG = {
             'class': 'logging.StreamHandler',
             'stream': 'ext://sys.stdout'
         },
+        'error': {
+            'level': 'ERROR',
+            'formatter': 'standard',
+            'class': 'logging.StreamHandler',
+            'stream': 'ext://sys.stderr'
+        },
     },
     'loggers': {
         '': {  # root logger
@@ -34,6 +31,12 @@ _LOGGING_CONFIG = {
             'level': 'NOTSET',
             'qualname': 'root',
             'propagate': True
+        },
+        'error': {
+            'handlers': ['default'],
+            'level': 'ERROR',
+            'qualname': 'error',
+            'propagate': False
         },
         'downloader': {
             'handlers': ['default'],

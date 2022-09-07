@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import os
+import sys
 from argparse import ArgumentParser, Namespace
 from logging import getLogger
 
@@ -16,18 +17,23 @@ _logger = getLogger()
 
 
 def main():
-    args: Namespace = _get_command_args()
-    _logger.info('Start app')
-    _logger.debug(f'args from request: url={args.url}, output={args.output}')
+    try:
+        args: Namespace = _get_command_args()
+        _logger.info('Start app')
+        _logger.debug(f'url={args.url}')
+        _logger.debug(f'output={args.output}')
 
-    file_path = download(
-        args.url,
-        args.output
-    )
+        file_path = download(
+            args.url,
+            args.output
+        )
 
-    _logger.info('End app with success')
+        _logger.info('End app with success')
 
-    print(file_path)
+        print(file_path)
+        sys.exit()
+    except Exception as e:
+        sys.exit(e)
 
 
 def _get_command_args() -> Namespace:
