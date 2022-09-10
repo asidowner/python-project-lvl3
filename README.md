@@ -2,6 +2,10 @@
 
 [![Actions Status](https://github.com/asidowner/python-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/asidowner/python-project-lvl3/actions)
 
+### Project tests status:
+
+[![page-loader-check](https://github.com/asidowner/python-project-lvl3/actions/workflows/page-loader-check.yml/badge.svg)](https://github.com/asidowner/python-project-lvl3/actions/workflows/page-loader-check.yml)
+
 ### Maintainability
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/fcfcec0a358189655fa8/maintainability)](https://codeclimate.com/github/asidowner/python-project-lvl3/maintainability)
