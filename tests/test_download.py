@@ -3,7 +3,8 @@ import os
 import requests
 import requests_mock
 from page_loader import download
-from page_loader.utils.exception import SiteNotAvailableError, FileNotAvailableError
+from page_loader.utils.exception import SiteNotAvailableError
+from page_loader.utils.exception import FileNotAvailableError
 
 
 def path_to_fixtures(name: str) -> str:
