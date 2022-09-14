@@ -29,9 +29,9 @@ def main():
         )
 
         print(f'\nPage was downloaded as {file_path}')
-        sys.exit()
-    except Exception:
-        sys.exit(2)
+        sys.exit(0)
+    except Exception as e:
+        sys.exit(e)
 
 
 def _get_command_args() -> Namespace:
