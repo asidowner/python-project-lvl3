@@ -2,15 +2,14 @@ from urllib.parse import urlparse, ParseResult
 from pathlib import PurePath
 from logging import getLogger
 import re
+from page_loader.utils.logging_tools import log_params
 
 _PATTERN = r'[\W|_]+'
 _logger = getLogger('name_generator')
 
 
+@log_params(_logger)
 def _get_f_name_from_url(url: str) -> tuple:
-    _logger.debug('Start _get_f_name_from_url')
-    _logger.debug(f'url: {url}')
-
     url_parsed: ParseResult = urlparse(url)
     _logger.debug(f'url_parsed: {url_parsed}')
 
@@ -37,53 +36,31 @@ def _get_f_name_from_url(url: str) -> tuple:
         _logger.debug(f'file_name_parts: {file_name_parts}')
 
     file_name: str = ''.join(list(map(_replace_by_regexp, file_name_parts)))
-    _logger.debug(f'file_name: {file_name}')
-    _logger.debug(f'suffix: {suffix}')
-
-    _logger.debug('End _get_f_name_from_url')
     return file_name, suffix
 
 
+@log_params(_logger)
 def get_file_name_from_url(url: str):
-    _logger.debug('Start get_file_name_from_url')
     file_name, suffix = _get_f_name_from_url(url)
-
     result = ''.join([file_name, suffix])
-    _logger.debug(f'result: {result}')
-
-    _logger.debug('End get_file_name_from_url')
     return result
 
 
+@log_params(_logger)
 def get_file_dir_name_from_url(url: str):
-    _logger.debug('Start get_file_dir_name_from_url')
     file_name, suffix = _get_f_name_from_url(url)
-
     result = file_name + '_files'
-    _logger.debug(f'result: {result}')
-
-    _logger.debug('End get_file_dir_name_from_url')
     return result
 
 
+@log_params(_logger)
 def get_html_name_from_url(url: str):
-    _logger.debug('Start get_html_name_from_url')
     file_name, suffix = _get_f_name_from_url(url)
-
     result = ''.join([file_name, '.html'])
-    _logger.debug(f'result: {result}')
-
-    _logger.debug('End get_html_name_from_url')
     return result
 
 
+@log_params(_logger)
 def _replace_by_regexp(value: str) -> str:
-    _logger.debug('Start _replace_by_regexp')
-    _logger.debug(f'value: {value}')
-
     result = re.sub(_PATTERN, '-', value)
-
-    _logger.debug(f'result: {result}')
-    _logger.debug('End _replace_by_regexp')
-
     return result

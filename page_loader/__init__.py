@@ -1,4 +1,4 @@
-from page_loader.utils.init_logging import init_logging
+from page_loader.utils.logging_tools import init_logging
 
 from page_loader.download import download  # noqa: F401
 

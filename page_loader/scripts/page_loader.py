@@ -28,9 +28,7 @@ def main():
             args.output
         )
 
-        _logger.info('End app with success')
-
-        print(file_path)
+        print(f'\nPage was downloaded as {file_path}')
         sys.exit()
     except Exception as e:
         sys.exit(e)

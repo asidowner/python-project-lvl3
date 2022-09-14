@@ -1,5 +1,6 @@
 import logging.config
 import os
+from logging import Logger
 
 _LOGGING_LEVEL = os.environ.get('PAGE_LOADER_LOGGING_LEVEL', 'INFO')
 
@@ -61,3 +62,24 @@ _LOGGING_CONFIG = {
 
 def init_logging():
     logging.config.dictConfig(_LOGGING_CONFIG)
+
+
+def log_params(logger: Logger):
+    def log_decorator(func):
+        logger.debug(f'Start {func.__name__}')
+
+        def wrapper(*args, **kwargs):
+            logger.debug('Input parameters.')
+            if args:
+                logger.debug(f'args={args}')
+            if kwargs:
+                for key, value in kwargs.items():
+                    logger.debug(f'{key} = {value}')
+            res = func(*args, **kwargs)
+            logger.debug(f'Result: {res}')
+            logger.debug(f'End {func.__name__}')
+            return res
+
+        return wrapper
+
+    return log_decorator
