@@ -24,7 +24,7 @@ def save_files(site_data: bytes,
                output_path: str,
                url: str,
                req_session: Session) -> BeautifulSoup:
-    html = BeautifulSoup(site_data, 'html.parser')
+    html = BeautifulSoup(site_data)
 
     parsed_url: ParseResult = urlparse(url)
     _logger.debug(f'url: {parsed_url}')

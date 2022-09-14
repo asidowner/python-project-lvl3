@@ -20,7 +20,7 @@ from page_loader.lib.name_generator import get_file_dir_name_from_url
                                  'google-com-path-to-some_files'
                              )
                          ])
-def test_get_image_dir_from_url(url, expected):
+def test_get_files_dir_from_url(url, expected):
     assert get_file_dir_name_from_url(url) == expected
 
 
@@ -28,18 +28,18 @@ def test_get_image_dir_from_url(url, expected):
                          [
                              (
                                  'https://google.com',
-                                 'google-com'
+                                 'google-com.html'
                              ),
                              (
                                  'https://google.com?a=b',
-                                 'google-com-a-b'
+                                 'google-com-a-b.html'
                              ),
                              (
                                  'https://google.com/path/to/some.jpg',
                                  'google-com-path-to-some.jpg'
                              )
                          ])
-def test_get_image_name_from_url(url, expected):
+def test_get_file_name_from_url(url, expected):
     assert get_file_name_from_url(url) == expected
 
 
