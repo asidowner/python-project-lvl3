@@ -16,8 +16,6 @@ from page_loader.utils.progress_bar import get_progress_bar
 
 _logger: Logger = getLogger('downloader')
 
-_ALLOWED_TAGS = ['img', 'link', 'script']
-
 _progress_bar: IncrementalBar = get_progress_bar()
 
 
@@ -42,7 +40,7 @@ def save_files(site_data: bytes,
     progress_interest = 100 / len(files) + 1
     _progress_bar.next(int(progress_interest))
     for index, file in enumerate(files):
-        file_link = file['src']
+        file_link = _get_url(file)
         _logger.debug(f'file_link: {file_link}')
 
         file_local_url = _save_file(parsed_url,
@@ -104,15 +102,25 @@ def _save_file(parsed_main_url: ParseResult,
 
 @log_params(_logger)
 def _filter_tag(tag) -> bool:
-    if tag.name in _ALLOWED_TAGS and tag.has_attr('src'):
+    if tag.name in ('script', 'img') and tag.has_attr('src'):
+        return True
+    elif tag.name == 'link':
         return True
     else:
         return False
 
 
 @log_params(_logger)
+def _get_url(tag) -> str:
+    return tag.get('href', tag.get('src'))
+
+
+@log_params(_logger)
 def _update_link_on_tag(tag, value):
-    tag['src'] = value
+    if tag.get('src'):
+        tag['src'] = value
+    else:
+        tag['href'] = value
     return tag
 
 

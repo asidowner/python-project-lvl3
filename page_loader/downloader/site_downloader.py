@@ -32,7 +32,7 @@ def save_site_from_bytes(req_session: Session,
 
     _logger.info('Site data received successfully')
     _logger.debug(f'status_code: {response.status_code}')
-    _logger.info(f'response: {response.text}')
+    _logger.debug(f'response: {response.text}')
 
     html: BeautifulSoup = save_files(response.content,
                                      output_path,

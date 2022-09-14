@@ -85,6 +85,11 @@ def mock_data(base_mock_url,
             200
         ),
         (
+            base_mock_url + 'simple1.css',
+            path_to_fixtures('simple.css'),
+            200
+        ),
+        (
             html_url_with_file_404,
             path_to_fixtures('index_error.html'),
             200
