@@ -61,3 +61,6 @@ page-loader -h
 ### Example with logging
 
 [![asciicast](https://asciinema.org/a/5XSBUzu4TvbWOeX3d3fShSQtm.svg)](https://asciinema.org/a/5XSBUzu4TvbWOeX3d3fShSQtm)
+
+### Example with progress bar
+[![asciicast](https://asciinema.org/a/LepnLmvnf4ocdG9NLESR9GWso.svg)](https://asciinema.org/a/LepnLmvnf4ocdG9NLESR9GWso)
