@@ -42,8 +42,10 @@ def _get_f_name_from_url(url: str) -> tuple:
 @log_params(_logger)
 def get_file_name_from_url(url: str):
     file_name, suffix = _get_f_name_from_url(url)
-    result = ''.join([file_name, suffix])
-    return result
+    if suffix == 'html':
+        return file_name
+    else:
+        return ''.join([file_name, suffix])
 
 
 @log_params(_logger)
