@@ -32,7 +32,7 @@ def save_site_from_bytes(req_session: Session,
 
     _logger.info('Site data received successfully')
     _logger.debug(f'status_code: {response.status_code}')
-    _logger.info(f'response: {response.text}')
+    _logger.debug(f'response: {response.text}')
 
     html: BeautifulSoup = save_files(response.content,
                                      output_path,
@@ -40,8 +40,8 @@ def save_site_from_bytes(req_session: Session,
                                      req_session)
 
     try:
-        with open(site_path, 'wb') as f:
-            f.write(html.prettify(encoding='utf8'))
+        with open(site_path, 'w') as f:
+            f.write(html.prettify())
     except OSError:
         raise OSError(f"Can't write data to {site_path}, check permissions")
 
