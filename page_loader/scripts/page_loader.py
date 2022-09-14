@@ -29,7 +29,7 @@ def main():
         )
 
         print(f'\nPage was downloaded as {file_path}')
-        sys.exit(0)
+        sys.exit()
     except Exception as e:
         sys.exit(e)
 
@@ -37,7 +37,7 @@ def main():
 def _get_command_args() -> Namespace:
     parser: ArgumentParser = \
         argparse.ArgumentParser(description=_MAIN_DESCRIPTION)
-    parser.add_argument('--output',
+    parser.add_argument('-o', '--output',
                         type=str,
                         help=_OUTPUT_DESCRIPTION, default=os.getcwd())
     parser.add_argument('url', type=str,
