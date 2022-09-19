@@ -3,8 +3,7 @@ import os
 import requests
 import requests_mock
 from page_loader import download
-from page_loader.utils.exception import SiteNotAvailableError
-from page_loader.utils.exception import FileNotAvailableError
+from page_loader.utils.exception import GetSiteDataError
 
 
 def path_to_fixtures(name: str) -> str:
@@ -184,12 +183,12 @@ def test_raise_if_dir_not_found(mock_session, main_html_url):
 def test_raise_if_site_not_available_error(tmpdir,
                                            mock_session,
                                            html_url_with_404):
-    with pytest.raises(SiteNotAvailableError):
+    with pytest.raises(GetSiteDataError):
         download(html_url_with_404, tmpdir, mock_session)
 
 
 def test_raise_if_file_not_available_error(tmpdir,
                                            mock_session,
                                            html_url_with_file_404):
-    with pytest.raises(FileNotAvailableError):
+    with pytest.raises(GetSiteDataError):
         download(html_url_with_file_404, tmpdir, mock_session)

@@ -51,6 +51,12 @@ _LOGGING_CONFIG = {
             'qualname': 'name_generator',
             'propagate': False
         },
+        'utils': {
+            'handlers': ['default'],
+            'level': _LOGGING_LEVEL,
+            'qualname': 'utils',
+            'propagate': False
+        },
         '__main__': {  # if __name__ == '__main__'
             'handlers': ['default'],
             'level': _LOGGING_LEVEL,

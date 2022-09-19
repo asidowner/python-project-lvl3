@@ -5,8 +5,10 @@ from requests import Session
 import os
 
 from page_loader.utils.exception import UnexpectedError
-from page_loader.utils.exception import SiteNotAvailableError
-from page_loader.utils.exception import FileNotAvailableError
+from page_loader.utils.exception import GetSiteDataError
+from page_loader.utils.exception import SaveMainFileError
+from page_loader.utils.exception import SaveAdditionalFileError
+from page_loader.utils.exception import RequestUrlTimeoutError
 from page_loader.utils.logging_tools import log_params
 
 _CUR_DIR = os.getcwd()
@@ -29,10 +31,11 @@ def download(url: str,
                                             output,
                                             url)
         return path_to_file
-    except (SiteNotAvailableError,
-            FileNotAvailableError,
+    except (GetSiteDataError,
             NotADirectoryError,
-            OSError) as e:
+            SaveMainFileError,
+            SaveAdditionalFileError,
+            RequestUrlTimeoutError) as e:
         _error_logger.error(e)
         raise
     except Exception as e:
