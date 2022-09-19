@@ -63,8 +63,6 @@ def _save_file(main_url: str,
     file_url = _get_file_url(parsed_main_url,
                              parsed_file_link)
 
-    _logger.debug(f'file_url: {file_url}')
-
     resp_content = request_data(req_session, file_url)
 
     file_name = get_file_name_from_url(file_url)

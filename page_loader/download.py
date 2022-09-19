@@ -21,15 +21,21 @@ _error_logger = getLogger('error')
 def download(url: str,
              output: str = _CUR_DIR,
              req_session: Session = Session()) -> str:
+    _logger.info(f'requested url: {url}')
+    _logger.info(f'requested output: {output}')
+
     try:
         if not os.path.isdir(output):
             raise NotADirectoryError(f'Directory on {output}'
                                      f' not exists or not created')
-        _logger.info(f'requested url: {url}')
-        _logger.info(f'requested output: {output}')
+
+        _logger.info('Start save HTML')
+
         path_to_file = save_site_from_bytes(req_session,
                                             output,
                                             url)
+
+        _logger.info('Site data saved successfully')
         return path_to_file
     except (GetSiteDataError,
             NotADirectoryError,

@@ -20,10 +20,7 @@ def save_site_from_bytes(req_session: Session,
     site_name = get_html_name_from_url(url)
     site_path = os.path.join(output_path, site_name)
 
-    _logger.info(f'write html file: {site_path}')
-
     resp_content = request_data(req_session, url)
-    _logger.info('Site data received successfully')
 
     html: BeautifulSoup = save_files(resp_content,
                                      output_path,
