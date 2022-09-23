@@ -16,3 +16,11 @@ class SaveMainFileError(Exception):
 
 class SaveAdditionalFileError(Exception):
     pass
+
+
+class CreateDirForFilesError(Exception):
+    pass
+
+
+class DeleteDirForFilesError(Exception):
+    pass
