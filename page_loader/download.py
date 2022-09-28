@@ -1,7 +1,6 @@
 from page_loader.downloader.site_downloader import save_site_from_bytes
 from logging import getLogger
 
-from requests import Session
 import os
 
 from page_loader.utils.exception import UnexpectedError
@@ -21,8 +20,7 @@ _error_logger = getLogger('error')
 
 @log_params(_logger)
 def download(url: str,
-             output: str = _CUR_DIR,
-             req_session: Session = Session()) -> str:
+             output: str = _CUR_DIR) -> str:
     _logger.info(f'requested url: {url}')
     _logger.info(f'requested output: {output}')
 
@@ -33,8 +31,7 @@ def download(url: str,
 
         _logger.info('Start save HTML')
 
-        path_to_file = save_site_from_bytes(req_session,
-                                            output,
+        path_to_file = save_site_from_bytes(output,
                                             url)
 
         _logger.info('Site data saved successfully')

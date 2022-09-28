@@ -3,7 +3,6 @@ from logging import Logger, getLogger
 from shutil import rmtree
 from urllib.parse import ParseResult, urlparse, urlunparse
 
-from requests import Session
 from bs4 import BeautifulSoup
 
 from progress.bar import IncrementalBar
@@ -25,8 +24,7 @@ _progress_bar: IncrementalBar = get_progress_bar()
 @log_params(_logger)
 def save_files(site_data: bytes,
                output_path: str,
-               url: str,
-               req_session: Session) -> BeautifulSoup:
+               url: str,) -> BeautifulSoup:
     html = BeautifulSoup(site_data, 'html.parser')
 
     path_to_files_dir = _make_files_dir(output_path, url)
@@ -41,8 +39,7 @@ def save_files(site_data: bytes,
 
         file_local_url = _save_file(url,
                                     file_link,
-                                    path_to_files_dir,
-                                    req_session)
+                                    path_to_files_dir)
 
         files[index] = _update_link_on_tag(file,
                                            file_local_url)
@@ -53,8 +50,7 @@ def save_files(site_data: bytes,
 @log_params(_logger)
 def _save_file(main_url: str,
                file_link: str,
-               dir_path: str,
-               req_session: Session) -> str:
+               dir_path: str) -> str:
     parsed_main_url = urlparse(main_url)
     parsed_file_link = urlparse(file_link)
 
@@ -65,7 +61,7 @@ def _save_file(main_url: str,
     file_url = _get_file_url(parsed_main_url,
                              parsed_file_link)
 
-    resp_content = request_data(req_session, file_url)
+    resp_content = request_data(file_url)
 
     file_name = get_file_name_from_url(file_url)
     file_path = os.path.join(dir_path, file_name)
@@ -75,8 +71,8 @@ def _save_file(main_url: str,
             f.write(resp_content)
     except OSError:
         raise SaveAdditionalFileError(f"Can't write data"
-                                      f" to {file_path},"
-                                      f" check permissions")
+                                      f' to {file_path},'
+                                      f' check permissions')
 
     result = '/'.join([os.path.basename(dir_path),
                        file_name])
@@ -131,8 +127,8 @@ def _make_files_dir(output_path: str,
         except OSError:
             DeleteDirForFilesError(
                 f"Can't delete dir"
-                f" on this pass {path_to_files_dir}."
-                f" Try delete dir by yourself"
+                f' on this pass {path_to_files_dir}.'
+                f' Try delete dir by yourself'
             )
     try:
         os.mkdir(path_to_files_dir)

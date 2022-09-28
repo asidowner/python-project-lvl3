@@ -2,7 +2,6 @@ import os.path
 
 from logging import getLogger, Logger
 from bs4 import BeautifulSoup
-from requests import Session
 
 from page_loader.downloader.files_downloader import save_files
 from page_loader.lib.name_generator import get_html_name_from_url
@@ -14,18 +13,16 @@ _logger: Logger = getLogger('downloader')
 
 
 @log_params(_logger)
-def save_site_from_bytes(req_session: Session,
-                         output_path: str,
+def save_site_from_bytes(output_path: str,
                          url: str) -> str:
     site_name = get_html_name_from_url(url)
     site_path = os.path.join(output_path, site_name)
 
-    resp_content = request_data(req_session, url)
+    resp_content = request_data(url)
 
     html: BeautifulSoup = save_files(resp_content,
                                      output_path,
-                                     url,
-                                     req_session)
+                                     url)
 
     try:
         with open(site_path, 'w') as f:

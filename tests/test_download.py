@@ -1,7 +1,6 @@
 import pytest
 import os
-import requests
-import requests_mock
+from requests_mock import Mocker
 from page_loader import download
 from page_loader.utils.exception import GetSiteDataError
 
@@ -11,14 +10,8 @@ def path_to_fixtures(name: str) -> str:
 
 
 @pytest.fixture
-def data_to_download() -> str:
-    with open(path_to_fixtures('index.html'), encoding='utf8') as f:
-        return f.read()
-
-
-@pytest.fixture
 def base_mock_url() -> str:
-    return 'mock://ru.test.com/'
+    return 'https://ru.test.com'
 
 
 @pytest.fixture
@@ -39,17 +32,17 @@ def expected_html() -> str:
 
 @pytest.fixture
 def main_html_url(base_mock_url):
-    return base_mock_url + 'project/51.json?a=b'
+    return f'{base_mock_url}/project/51.json?a=b'
 
 
 @pytest.fixture
 def html_url_with_404(base_mock_url):
-    return base_mock_url + 'test_error'
+    return f'{base_mock_url}/test_error'
 
 
 @pytest.fixture
 def html_url_with_file_404(base_mock_url):
-    return base_mock_url + 'file_error'
+    return f'{base_mock_url}/file_error'
 
 
 @pytest.fixture
@@ -64,27 +57,27 @@ def mock_data(base_mock_url,
             200
         ),
         (
-            base_mock_url + 'img.png',
+            f'{base_mock_url}/img.png',
             path_to_fixtures('img.png'),
             200
         ),
         (
-            base_mock_url + 'script1.js',
+            f'{base_mock_url}/script1.js',
             path_to_fixtures('script1.js'),
             200
         ),
         (
-            base_mock_url + 'script2.js',
+            f'{base_mock_url}/script2.js',
             path_to_fixtures('script2.js'),
             200
         ),
         (
-            base_mock_url + 'simple.css',
+            f'{base_mock_url}/simple.css',
             path_to_fixtures('simple.css'),
             200
         ),
         (
-            base_mock_url + 'simple1.css',
+            f'{base_mock_url}/simple1.css',
             path_to_fixtures('simple.css'),
             200
         ),
@@ -117,28 +110,23 @@ def expected_href_file_name(expected_files_dir_name):
 
 
 @pytest.fixture
-def mock_session(data_to_download,
-                 mock_data):
-    session = requests.Session()
-    adapter = requests_mock.Adapter()
-    session.mount('mock://', adapter)
+def mock_session(mock_data, requests_mock: Mocker):
     for url, data, status_code in mock_data:
         if data:
             with open(data, 'rb') as f:
-                adapter.register_uri('GET',
-                                     url,
-                                     status_code=status_code,
-                                     content=f.read())
+                requests_mock.get(url,
+                                  status_code=status_code,
+                                  content=f.read())
         else:
-            adapter.register_uri('GET', url, status_code=status_code)
-    return session
+            requests_mock.get(url, status_code=status_code)
+    return requests_mock
 
 
 def test_downloaded_file_name(tmpdir,
-                              mock_session,
                               main_html_url,
+                              mock_session,
                               expected_f_name):
-    file_path = download(main_html_url, tmpdir, mock_session)
+    file_path = download(main_html_url, tmpdir)
     assert file_path == tmpdir.join(expected_f_name)
 
 
@@ -146,7 +134,7 @@ def test_download(tmpdir,
                   mock_session,
                   main_html_url,
                   expected_html):
-    file_path = download(main_html_url, tmpdir, mock_session)
+    file_path = download(main_html_url, tmpdir)
     with open(file_path, 'r', encoding='utf8') as f:
         assert f.read() == expected_html
 
@@ -156,7 +144,7 @@ def test_files_download(tmpdir,
                         main_html_url,
                         expected_files_dir_name,
                         expected_additional_files_names):
-    download(main_html_url, tmpdir, mock_session)
+    download(main_html_url, tmpdir)
     path_to_files_dir = os.path.join(tmpdir, expected_files_dir_name)
     assert os.path.isdir(path_to_files_dir)
 
@@ -169,26 +157,24 @@ def test_file_with_href_not_downloaded(tmpdir,
                                        main_html_url,
                                        expected_files_dir_name,
                                        expected_href_file_name):
-    download(main_html_url, tmpdir, mock_session)
+    download(main_html_url, tmpdir)
     assert not os.path.isfile(os.path.join(tmpdir,
                                            expected_files_dir_name,
                                            expected_href_file_name))
 
 
-def test_raise_if_dir_not_found(mock_session, main_html_url):
+def test_raise_if_dir_not_found(main_html_url, mock_session):
     with pytest.raises(NotADirectoryError):
-        download(main_html_url, '/unknown/dir/path', mock_session)
+        download(main_html_url, '/unknown/dir/path')
 
 
-def test_raise_if_site_not_available_error(tmpdir,
-                                           mock_session,
+def test_raise_if_site_not_available_error(tmpdir, mock_session,
                                            html_url_with_404):
     with pytest.raises(GetSiteDataError):
-        download(html_url_with_404, tmpdir, mock_session)
+        download(html_url_with_404, tmpdir)
 
 
-def test_raise_if_file_not_available_error(tmpdir,
-                                           mock_session,
+def test_raise_if_file_not_available_error(tmpdir, mock_session,
                                            html_url_with_file_404):
     with pytest.raises(GetSiteDataError):
-        download(html_url_with_file_404, tmpdir, mock_session)
+        download(html_url_with_file_404, tmpdir)

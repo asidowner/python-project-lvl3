@@ -8,8 +8,5 @@ dist/
 /.coverage
 /htmlcov/
 /coverage.xml
-/google-com.html
-/google-com/
-/google-com_files/
-/ru-hexlet-io-courses_files/
-/ru-hexlet-io-courses.html
+*_files
+*.html
