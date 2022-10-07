@@ -120,12 +120,12 @@ def _make_files_dir(output_path: str,
     files_dir_name = get_file_dir_name_from_url(url)
     path_to_files_dir = os.path.join(output_path,
                                      files_dir_name)
-    if os.path.isdir(path_to_files_dir):
+    if os.path.exists(path_to_files_dir):
         _logger.debug('Dir for additional files exists, try delete')
         try:
             rmtree(path_to_files_dir)
         except OSError:
-            DeleteDirForFilesError(
+            raise DeleteDirForFilesError(
                 f"Can't delete dir"
                 f' on this pass {path_to_files_dir}.'
                 f' Try delete dir by yourself'
@@ -133,7 +133,7 @@ def _make_files_dir(output_path: str,
     try:
         os.mkdir(path_to_files_dir)
     except OSError:
-        CreateDirForFilesError(
+        raise CreateDirForFilesError(
             f"Can't create dir"
             f' on this pass'
             f' {path_to_files_dir}'
