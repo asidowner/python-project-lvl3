@@ -2,12 +2,14 @@ import os
 import stat
 import pytest
 
-from page_loader.downloader.files_downloader import _make_files_dir
-from page_loader.downloader.files_downloader import _save_file
+from page_loader.downloader.files_downloader import _make_files_dir, \
+    _save_file
+
 from page_loader.lib.name_generator import get_file_dir_name_from_url
-from page_loader.utils.exception import DeleteDirForFilesError
-from page_loader.utils.exception import CreateDirForFilesError
-from page_loader.utils.exception import SaveAdditionalFileError
+
+from page_loader.utils.exception import DeleteDirForFilesError, \
+    CreateDirForFilesError, \
+    SaveAdditionalFileError
 
 
 def test_make_files_dir_create_error(tmpdir, main_html_url):

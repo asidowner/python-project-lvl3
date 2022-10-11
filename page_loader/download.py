@@ -3,13 +3,14 @@ from logging import getLogger
 
 import os
 
-from page_loader.utils.exception import UnexpectedError
-from page_loader.utils.exception import GetSiteDataError
-from page_loader.utils.exception import SaveMainFileError
-from page_loader.utils.exception import SaveAdditionalFileError
-from page_loader.utils.exception import RequestUrlTimeoutError
-from page_loader.utils.exception import DeleteDirForFilesError
-from page_loader.utils.exception import CreateDirForFilesError
+from page_loader.utils.exception import UnexpectedError, \
+    GetSiteDataError, \
+    SaveMainFileError, \
+    SaveAdditionalFileError, \
+    RequestUrlTimeoutError, \
+    DeleteDirForFilesError, \
+    CreateDirForFilesError
+
 from page_loader.utils.logging_tools import log_params
 
 _CUR_DIR = os.getcwd()

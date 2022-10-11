@@ -1,8 +1,8 @@
 import pytest
 
-from page_loader.lib.name_generator import get_html_name_from_url
-from page_loader.lib.name_generator import get_file_name_from_url
-from page_loader.lib.name_generator import get_file_dir_name_from_url
+from page_loader.lib.name_generator import get_html_name_from_url, \
+    get_file_name_from_url, \
+    get_file_dir_name_from_url
 
 
 @pytest.mark.parametrize('url,expected',

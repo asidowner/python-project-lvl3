@@ -5,8 +5,8 @@ from requests import Timeout
 from logging import getLogger
 
 from page_loader.utils.logging_tools import log_params
-from page_loader.utils.exception import RequestUrlTimeoutError
-from page_loader.utils.exception import GetSiteDataError
+from page_loader.utils.exception import RequestUrlTimeoutError, \
+    GetSiteDataError
 
 _logger = getLogger('utils')
 

@@ -7,11 +7,11 @@ from bs4 import BeautifulSoup
 
 from progress.bar import IncrementalBar
 
-from page_loader.lib.name_generator import get_file_dir_name_from_url
-from page_loader.lib.name_generator import get_file_name_from_url
-from page_loader.utils.exception import SaveAdditionalFileError
-from page_loader.utils.exception import CreateDirForFilesError
-from page_loader.utils.exception import DeleteDirForFilesError
+from page_loader.lib.name_generator import get_file_dir_name_from_url, \
+    get_file_name_from_url
+from page_loader.utils.exception import SaveAdditionalFileError, \
+    CreateDirForFilesError, \
+    DeleteDirForFilesError
 from page_loader.utils.logging_tools import log_params
 from page_loader.utils.progress_bar import get_progress_bar
 from page_loader.utils.request_tools import request_data
@@ -24,7 +24,7 @@ _progress_bar: IncrementalBar = get_progress_bar()
 @log_params(_logger)
 def save_files(site_data: bytes,
                output_path: str,
-               url: str,) -> BeautifulSoup:
+               url: str, ) -> BeautifulSoup:
     html = BeautifulSoup(site_data, 'html.parser')
 
     path_to_files_dir = _make_files_dir(output_path, url)

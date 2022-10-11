@@ -1,8 +1,8 @@
 import pytest
 import os
 from page_loader import download
-from page_loader.utils.exception import GetSiteDataError
-from page_loader.utils.exception import RequestUrlTimeoutError
+from page_loader.utils.exception import GetSiteDataError, \
+    RequestUrlTimeoutError
 
 
 def test_downloaded_file_name(tmpdir,
